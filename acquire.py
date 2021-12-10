@@ -36,7 +36,7 @@ garagetotalsqft, poolcnt, roomcnt, yearbuilt, taxvaluedollarcnt
 FROM predictions_2017 
 JOIN properties_2017 using(parcelid) 
 JOIN propertylandusetype using(propertylandusetypeid) 
-WHERE propertylandusetype.propertylandusetypeid = 261""", 
+WHERE propertylandusetype.propertylandusetypeid = 261 OR propertylandusetype.propertylandusetypeid = 279""", 
         get_connection('zillow'))
         zillow.to_csv(index = False)
     return zillow
@@ -73,16 +73,44 @@ def remove_outliers(df, k, col_list):
 
 def prepare_zillow(df):
     ''' Prepare zillow data for exploration'''
+
+    df[['garagecarcnt', 'garagetotalsqft', 'poolcnt']] = df[['garagecarcnt', 'garagetotalsqft', 'poolcnt']].fillna(0)
+
+    df = df.dropna()
+
     df = yearbuilt_years(df)
 
-    df = df.rename(columns = {'bedroomcnt':'bedrooms', 
-                              'bathroomcnt':'bathrooms', 
-                              'calculatedfinishedsquarefeet':'area',
-                              'taxvaluedollarcnt':'tax_value',
-                              'fips' : 'county'})
+    df = df.drop(columns = ['transactiondate', 'yearbuilt'])
+
+    df = df.rename(columns = {'fips':'county', 'calculatedfinishedsquarefeet' : 'area', 'bathroomcnt' : 'bathrooms',
+                         'bedroomcnt' : 'bedrooms', 'poolcnt' : 'pools', 'garagecarcnt' : 'garages',
+                          'taxvaluedollarcnt': 'tax_value'})
+
+    # Create Counties By their codes
+    df['LA_County']= df['county'] == 6037
+    df['Orange_County']= df['county'] == 6059
+    df['Ventura_County']= df['county'] == 6111
+
+    # Set to object type
+    df['county'] = df['county'].astype(object)
+
+    # Rename County To showcase counties instead of their numeric id's
+    df['county'] = df.county.replace(6059, 'Orange')
+    df['county'] = df.county.replace(6037, 'LA')
+    df['county'] = df.county.replace(6111, 'Ventura')
+
+    # Replace Counties TRUE/ FALSE values with 0/1's
+    df['LA_County'] = df['LA_County'].replace(False, 0)
+    df['LA_County'] = df['LA_County'].replace(True, 1)
+
+    df['Orange_County'] = df['Orange_County'].replace(False, 0)
+    df['Orange_County'] = df['Orange_County'].replace(True, 1)
+
+    df['Ventura_County'] = df['Ventura_County'].replace(False, 0)
+    df['Ventura_County'] = df['Ventura_County'].replace(True, 1)
 
     # removing outliers
-    col_list = ['bedrooms', 'bathrooms', 'area', 'tax_value']
+    col_list = ['bedrooms', 'bathrooms', 'area', 'tax_value', 'garages', 'roomcnt', 'garagetotalsqft']
     k = 1.5
     
     df = remove_outliers(df, k, col_list)
