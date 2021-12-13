@@ -25,20 +25,19 @@ Use file `acquire.py` that will upload data to the final noteboolk.
 
 idx  |Feature                           |Not null values |data type|
 | --- | ---------------------------------|----------------|--------|  
-| 0   |bedrooms                       | 50611 non-null  | float64  |
-| 1   |bathrooms          | 50611 non-null  | float64  |
-| 2   |area                  | 50611 non-null  | float64  |
-| 3   |age                    | 50611 non-null  | float64  |
-| 6   |county                            | 50611 non-null  | float64  |
-| 7   |tax_value
-| 6   |garages                            | 50611 non-null  | float64  |
-| 6   |garagessqft                            | 50611 non-null  | float64  |
-| 6   |pools                            | 50611 non-null  | float64  |
-| 6   |roomcnt                            | 50611 non-null  | float64  |
-| 6   |LA_County                            | 50611 non-null  | float64  |
-| 6   |Orange_County                            | 50611 non-null  | float64  |
-| 6   |Ventura_County                            | 50611 non-null  | float64  |
-| 6   |county                            | 50611 non-null  | float64  |
+| 0   |bedrooms                       | 45573 non-null  | float64  |
+| 1   |bathrooms          | 45573 non-null  | float64  |
+| 2   |area                  | 45573 non-null  | float64  |
+| 3   |age                    | 45573 non-null  | float64  |
+| 4   |county                            | 45573 non-null  | object  |
+| 5   |tax_value                         | 45573 non-null | float64|
+| 6   |garages                            | 45573 non-null  | float64  |
+| 7   |garagetotalsqft                            | 45573 non-null  | float64  |
+| 8   |pools                            | 45573 non-null  | int64  |
+| 9   |roomcnt                            | 45573 non-null  | float64  |
+| 10   |LA_County                            | 45573 non-null  | int64  |
+| 11  |Orange_County                            | 45573 non-null  | int64  |
+| 12  |Ventura_County                            | 45573 non-null  | int64  |
 
 # Steps to reproduce:
 You will need an env.py file taht contains the hostname, username and password of the mySQL database that contains the zillow.properties2017 , zillow.predictions2017, zillow.propertylandusetype tables. Store that env file locally in the repository
