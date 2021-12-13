@@ -1,7 +1,6 @@
 import env
 import pandas as pd
 import os
-from explore import yearbuilt_years
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -31,7 +30,7 @@ def get_zillow_data():
     if os.path.isfile(filename):
         zillow = pd.read_csv(filename)
     else:
-        zillow = pd.read_sql("""SELECT properties_2017.id, transactiondate, bathroomcnt, bedroomcnt, calculatedfinishedsquarefeet, fips, garagecarcnt,
+        zillow = pd.read_sql("""SELECT bathroomcnt, bedroomcnt, calculatedfinishedsquarefeet, fips, garagecarcnt,
 garagetotalsqft, poolcnt, roomcnt, yearbuilt, taxvaluedollarcnt 
 FROM predictions_2017 
 JOIN properties_2017 using(parcelid) 
@@ -74,14 +73,16 @@ def remove_outliers(df, k, col_list):
 def prepare_zillow(df):
     ''' Prepare zillow data for exploration'''
 
+    # Fill nullls with zero value
     df[['garagecarcnt', 'garagetotalsqft', 'poolcnt']] = df[['garagecarcnt', 'garagetotalsqft', 'poolcnt']].fillna(0)
 
+    # Drop rest of the null values
     df = df.dropna()
 
+    # Use yearbuilt_years function to transform years into age
     df = yearbuilt_years(df)
 
-    df = df.drop(columns = ['transactiondate', 'yearbuilt'])
-
+    # Rename columns for readability
     df = df.rename(columns = {'fips':'county', 'calculatedfinishedsquarefeet' : 'area', 'bathroomcnt' : 'bathrooms',
                          'bedroomcnt' : 'bedrooms', 'poolcnt' : 'pools', 'garagecarcnt' : 'garages',
                           'taxvaluedollarcnt': 'tax_value'})
@@ -184,45 +185,6 @@ def yearbuilt_years(df):
 #--------------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------------------
-
-'''
-def chart_zillow(df):
-
-    plt.figure(figsize=(16, 3))
-    # List of columns
-    cols = ['bedrooms', 'bathrooms', 'area', 'tax_value', 'tax_amount', 'year_built','fips']
-    # Note the enumerate code, which is functioning to make a counter for use in successive plots.
-    for i, col in enumerate(cols):
-        # i starts at 0, but plot nos should start at 1
-        plot_number = i + 1
-        # Create subplot.
-        plt.subplot(1,9, plot_number)
-        # Title with column name.
-        plt.title(col)
-        # Display histogram for column.
-        df[col].hist(bins=10, edgecolor='black')
-        # Hide gridlines.
-        plt.grid(False)
-        plt.tight_layout()
-    plt.figure(figsize=(16, 3))
-
-    # List of columns
-    cols = ['bedrooms', 'bathrooms', 'area', 'tax_value', 'tax_amount', 'year_built','fips']
-    # Note the enumerate code, which is functioning to make a counter for use in successive plots.
-    for i, col in enumerate(cols):
-        # i starts at 0, but plot nos should start at 1
-        plot_number = i + 1
-        # Create subplot.
-        plt.subplot(1,9, plot_number)
-        # Title with column name.
-        plt.title(col)
-        # Display histogram for column.
-        quantile_scaled_zillow2[col].hist(bins=10, edgecolor='black')
-        # Hide gridlines.
-        plt.grid(False)
-        plt.tight_layout()
-    return df
-'''
 
 #--------------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------------------

@@ -56,30 +56,3 @@ def plot_categorical_and_continuous_vars(df, x_var, list_of_features):
         plt.tight_layout()
 
     plt.show()
-    
-
-
-
-'''
-converts year_built to years (AKA age)
-'''
-# For zillow data set to create the number of years passed
-
-def yearbuilt_years(df):
-    df.year_built =  df.year_built.astype(int)
-    year = date.today().year
-    df['age'] = year - df.year_built
-    # dropping the 'yearbuilt' column now that i have the age
-    df = df.drop(columns=['year_built'])
-    
-    return df
-
-
-'''
-Converts month to year
-'''
-def months_to_years(df, column):
-    
-    df[column] = df[column] / 12
-    
-    return df
