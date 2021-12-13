@@ -42,7 +42,7 @@ idx  |Feature                           |Not null values |data type|
 # Steps to reproduce:
 You will need an env.py file taht contains the hostname, username and password of the mySQL database that contains the zillow.properties2017 , zillow.predictions2017, zillow.propertylandusetype tables. Store that env file locally in the repository
 
-Clone the repo from github(including all the files acquire.py and explore.py) (confirm .gitignore is hiding your env.py file) Libraries needed are pandas, matplotlib, seaborn, numby, sklearn After so you will be able to run zillow_report
+Clone the repo from github(including all the files acquire.py) (confirm .gitignore is hiding your env.py file) Libraries needed are pandas, matplotlib, seaborn, numby, sklearn After so you will be able to run zillow_report
 # The Plan:
 - Acquiring
 - Pre Exploration
@@ -54,7 +54,7 @@ Clone the repo from github(including all the files acquire.py and explore.py) (c
 - Takeaways / Recommendations / and Next time
 
 ## Wrangle
-Modules : acquire.py and explore.py
+Modules : acquire.py
 
 acquire.py retrieves the zillow data base via sql scripyt, is also prepares using prep_zillow function which removes null and repalces some values with zeros.
 It changes year_built to age, and also removes outliers all in prep_zillow function. It also splits the data into train, validate and test. Test is 20% of the original dataset, validate is .3 * .8 = 24% of the original dataset, and train is .7 * .80= 56% of the original dataset. The function returns, in this order, train, validate and test dataframes.
